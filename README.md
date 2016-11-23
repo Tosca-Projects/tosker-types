@@ -1,5 +1,6 @@
 # Tosker Types
-Repository of the custom TOSCA types for the tosker engine. Simply use as followed:
+Repository of the custom TOSCA types for the tosker engine.
+Add in the TOSCA yaml file the following:
 ```
 imports:
   - tosker: https://di-unipi-socc.github.io/tosker-types/<version>/tosker.yaml

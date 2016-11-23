@@ -1,0 +1,190 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+
+description: >
+  Definitios of the custom types for the tosKer engine.
+
+node_types:
+  tosker.docker.volume:
+    derived_from: tosca.nodes.Root
+
+    attributes:
+      id:
+        type: string
+      # BEGIN work around for the get_attribute bug in toscaparser
+      driver:
+        type: string
+        required: false
+      device:
+        type: string
+        required: false
+      type:
+        type: string
+        required: false
+      driver_opt:
+        type: map
+        required: false
+      # END
+
+    properties:
+      driver:
+        type: string
+        required: false
+      device:
+        type: string
+        required: false
+      type:
+        type: string
+        required: false
+      driver_opt:
+        type: map
+        required: false
+
+    capabilities:
+      volume:
+        type: tosca.capabilities.Attachment
+        valid_source_types: [tosker.docker.container.persistent, tosker.docker.container.volatile]
+
+
+
+  tosker.docker.container.persistent:
+    derived_from: tosca.nodes.Root
+
+    attributes:
+      id:
+        type: string
+      private_address:
+        type: string
+      public_address:
+        type: string
+      # BEGIN work around for the get_attribute bug in toscaparser
+      env_variable:
+        type: map
+        required: false
+      cmd:
+        type: string
+        required: false
+      ports:
+        type: map
+        required: false
+      # END
+
+    properties:
+      env_variable:
+        type: map
+        required: false
+      cmd:
+        type: string
+        required: false
+      ports:
+        type: map
+        required: false
+
+    requirements:
+      - connectsTo:
+          capability: tosca.capabilities.Attachment
+          occurrences: [0, UNBOUNDED]
+          # BEGIN because toscaparser doesn't consider this optional
+          node: tosker.docker.container.persistent
+          relationship: tosca.relationships.ConnectsTo
+          # END
+      - dependsOn:
+          capability: tosca.capabilities.Attachment
+          occurrences: [0, UNBOUNDED]
+          # BEGIN add because toscaparser doesn't consider this optional
+          node: tosker.docker.container.persistent
+          relationship: tosca.relationships.DependsOn
+          # END
+      - volume:
+          capability: tosca.capabilities.Attachment
+          occurrences: [0, UNBOUNDED]
+          # BEGIN add because toscaparser doesn't consider this optional
+          node: tosker.docker.volume
+          relationship: tosca.relationships.AttachesTo
+          # END
+
+    capabilities:
+      host:
+        type: tosca.capabilities.Attachment
+        valid_source_types: [tosker.software]
+      connectsTo:
+        type: tosca.capabilities.Attachment
+        valid_source_types: [tosker.software, tosker.docker.container.persistent]
+      dependsOn:
+        type: tosca.capabilities.Attachment
+        valid_source_types: [tosker.software, tosker.docker.container.persistent]
+
+
+
+  tosker.docker.container.volatile:
+    derived_from: tosca.nodes.Root
+
+    attributes:
+      id:
+        type: string
+      private_address:
+        type: string
+      public_address:
+        type: string
+      # BEGIN work around for the get_attribute bug in toscaparser
+      ports:
+        type: map
+        required: false
+      # END
+
+    properties:
+      ports:
+        type: map
+        required: false
+
+    requirements:
+      - volume:
+          capability: tosca.capabilities.Attachment
+          occurrences: [0, UNBOUNDED]
+          # BEGIN add because toscaparser doesn't consider this optional
+          node: tosker.docker.volume
+          relationship: tosca.relationships.AttachesTo
+          # END
+
+    capabilities:
+      host:
+        type: tosca.capabilities.Attachment
+        valid_source_types: [tosker.software]
+
+
+
+  tosker.software:
+    derived_from: tosca.nodes.SoftwareComponent
+
+    requirements:
+      - connectsTo:
+          capability: tosca.capabilities.Attachment
+          occurrences: [0, UNBOUNDED]
+          # BEGIN add because toscaparser doesn't consider this optional
+          node: tosker.software
+          relationship: tosca.relationships.ConnectsTo
+          # END
+      - dependsOn:
+          capability: tosca.capabilities.Attachment
+          occurrences: [0, UNBOUNDED]
+          # BEGIN add because toscaparser doesn't consider this optional
+          node: tosker.docker.container.persistent
+          relationship: tosca.relationships.DependsOn
+          # END
+      - host:
+          capability: tosca.capabilities.Attachment
+          occurrences: 1
+          # BEGIN add because toscaparser doesn't consider this optional
+          node: tosker.software
+          relationship: tosca.relationships.ConnectsTo
+          # END
+
+    capabilities:
+      host:
+        type: tosca.capabilities.Attachment
+        valid_source_types: [tosker.software]
+      connectsTo:
+        type: tosca.capabilities.Attachment
+        valid_source_types: [tosker.software, tosker.docker.container.persistent]
+      dependsOn:
+        type: tosca.capabilities.Attachment
+        valid_source_types: [tosker.software, tosker.docker.container.persistent]
