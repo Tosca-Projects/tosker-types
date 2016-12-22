@@ -27,7 +27,7 @@ node_types:
         required: false
 
     requirements:
-      - attach:
+      - storage:
           capability: tosca.capabilities.Attachment
           occurrences: [0, UNBOUNDED]
           node: tosker.nodes.Volume
@@ -60,23 +60,23 @@ node_types:
         required: false
 
     requirements:
-      - connect:
+      - connection:
           capability: tosca.capabilities.Endpoint
           occurrences: [0, UNBOUNDED]
           node: tosker.nodes.Root
           relationship: tosca.relationships.ConnectsTo
-      - depend:
+      - dependency:
           capability: tosca.capabilities.Node
           occurrences: [0, UNBOUNDED]
           node: tosker.nodes.Root
           relationship: tosca.relationships.DependsOn
 
     capabilities:
-      connect:
+      endpoint:
         type: tosca.capabilities.Endpoint
         valid_source_types: [tosker.nodes.Software, tosker.nodes.Container.Executable]
         occurrences: [0, UNBOUNDED]
-      depend:
+      feature:
         type: tosca.capabilities.Node
         valid_source_types: [tosker.nodes.Software, tosker.nodes.Container.Executable]
         occurrences: [0, UNBOUNDED]
@@ -100,7 +100,7 @@ node_types:
         required: false
 
     capabilities:
-      attach:
+      attachment:
         type: tosca.capabilities.Attachment
         valid_source_types: [tosker.nodes.Container, tosker.nodes.Container.Executable]
         occurrences: [0, UNBOUNDED]
@@ -110,12 +110,12 @@ node_types:
     derived_from: tosker.nodes.Root
 
     requirements:
-      - connect:
+      - connection:
           capability: tosca.capabilities.Endpoint
           occurrences: [0, UNBOUNDED]
           node: tosker.nodes.Root
           relationship: tosca.relationships.ConnectsTo
-      - depend:
+      - dependency:
           capability: tosca.capabilities.Node
           occurrences: [0, UNBOUNDED]
           node: tosker.nodes.Root
@@ -127,17 +127,17 @@ node_types:
           relationship: tosca.relationships.HostedOn
 
     capabilities:
-      host:
-        type: tosca.capabilities.Container
-        valid_source_types: [tosker.nodes.Software]
-        occurrences: [0, UNBOUNDED]
-      connect:
+      endpoint:
         type: tosca.capabilities.Endpoint
         valid_source_types: [tosker.nodes.Software, tosker.nodes.Container.Executable]
         occurrences: [0, UNBOUNDED]
-      depend:
+      feature:
         type: tosca.capabilities.Node
         valid_source_types: [tosker.nodes.Software, tosker.nodes.Container.Executable]
+        occurrences: [0, UNBOUNDED]
+      host:
+        type: tosca.capabilities.Container
+        valid_source_types: [tosker.nodes.Software]
         occurrences: [0, UNBOUNDED]
 
 artifact_types:
