@@ -1,5 +1,5 @@
-# TosKer Types
-Repository of the custom TOSCA types for the TosKer engine.
+# Tosker Types
+Repository of the custom TOSCA types for the [TosKer](https://github.com/di-unipi-socc/TosKer) engine.
 
 The types are avaible on the url `https://di-unipi-socc.github.io/tosker-types/tosker.yaml`. It is also possible to get a types for specific version of TosKer (i.e. `https://di-unipi-socc.github.io/tosker-types/<version>/tosker.yaml`)
 
