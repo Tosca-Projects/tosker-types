@@ -6,21 +6,6 @@ group_types:
   tosker.groups.DeploymentUnit:
     derived_from: tosca.groups.Root
 
-policy_types:
-  tosker.policies.Protocol:
-    derived_from: tosca.policies.Root
-    properties:
-      initial_state:
-        type: string
-        required: true
-      states:
-        type: map
-        required: true
-      transitions:
-        type: list
-        required: true
-    targets: [ tosker.nodes.Software ]
-
 node_types:
   tosker.nodes.Root:
     derived_from: tosca.nodes.Root
@@ -143,7 +128,7 @@ node_types:
 artifact_types:
   tosker.artifacts.Root:
     derived_from: tosca.artifacts.Root
-
+    
   tosker.artifacts.Image:
     derived_from: tosker.artifacts.Root
     description: a Docker image
